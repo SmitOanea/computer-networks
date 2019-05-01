@@ -1,0 +1,30 @@
+version: '2.1'
+
+services:
+    tm1:
+        build:
+            context: docker
+            dockerfile: Dockerfile-tema2
+        privileged: true
+        command: python /elocal/src/udp_client.py -s 172.19.0.2 -p 10000 -m "Salut"
+        depends_on:
+            - "tm2"
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+    tm2:
+        build:
+            context: docker
+            dockerfile: Dockerfile-tema2
+        privileged: true
+        command: python /elocal/server.py -p 10000
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+
+networks:
+    dmz: {}
